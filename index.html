@@ -78,7 +78,7 @@
 
         socket.on('new message', function(data){
             $chat.append(`
-            <div class="well card w-75 ml-auto mb-1" style="max-height: 20vh;">
+            <div class="well card w-75 ml-auto mb-1" style="height: 200px; overflow-y: scroll;">
                 <div class="card-body" >
                     <strong>${data.user}: </strong>${data.msg}
                 </div>
