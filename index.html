@@ -84,11 +84,7 @@
                 </div>
             </div>
             `);
-            if(typeof $chat[0] !== 'undefined'){
-            $chat.animate({
-            scrollTop: $chat.get[0].scrollHeight
-            }, 500);
-            }
+            $chat.animate({scrollTop: $chat.prop("scrollHeight")}, 1000);
         })
 
         $userForm.submit(function(e){
