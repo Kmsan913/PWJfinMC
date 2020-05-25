@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+    <script src = "index.js"></script>
+    <style>
+         #messageArea{
+            display:none;
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <div class = "container justify-content-center align-items-center" id = "userFormArea" >
+        <h1 class="m-5 display-4 text-center">WELCOME TO OUR MESSENGER CLONE</h1>
+        <form class="container w-75" id = "userForm">
+            <div class ="form-group row align-items-center">
+                <label class="col-sm-2 col-form-label">Enter Username</label>
+                <div class="col-sm-10">
+                    <input class = "form-control" id = "username" placeholder="Username"/>
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Login">
+        </form>
+    </div>
+
+    <div class="container mt-5" id = "messageArea">
+        <div class="p-5 row" style="height: 85vh;">
+
+            <div class="col-sm-3 align-self-start">
+                <div class = "well">
+                    <h3>Online Users</h3>
+                    <ul class = "list-group text-center" id = "users"></ul>
+                </div>
+            </div>
+
+            <div class="col-sm-9 align-self-end">
+                    <div class = "chat mb-3 text-right text-dark d-flex flex-column flex-end" 
+                    id = "chat"
+                    style="max-height: 65vh; overflow-y: auto;"
+                    ></div>
+        
+                    <form id = "messageForm">
+                        <div class="input-group">
+                            <input type="text" id="message" class="form-control" placeholder="Message..." aria-label="message" aria-describedby="send">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="submit" id="send" value = "Send">Send</button>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        
+        $(function () {
+        var socket = io();
+        var $messageForm = $('#messageForm');
+        var $message = $('#message');
+        var $chat = $('#chat');
+        var $messageArea = $('#messageArea');
+        var $userFormArea = $('#userFormArea');
+        var $userForm = $('#userForm');
+        var $users= $('#users');
+        var $username= $('#username');
+
+
+        $messageForm.submit(function(e){
+            e.preventDefault();
+            socket.emit('send message', $message.val());
+            $message.val('');
+        });
+
+        socket.on('new message', function(data){
+            $chat.append(`
+            <div class="well card w-75 ml-auto mb-1">
+                <div class="card-body">
+                    <strong>${data.user}: </strong>${data.msg}
+                </div>
+            </div>
+            `);
+        })
+
+        $userForm.submit(function(e){
+            e.preventDefault();
+            socket.emit('new user', $username.val(), function(data){
+                if(data){
+                    $userFormArea.hide();
+                    $messageArea.show();
+              }
+            });
+            $username.val('');
+        });
+        socket.on('get users', function(data){
+            var html = '';
+            for (i = 0; i< data.length; i++){
+                html += '<li class = "list-group-item bg-info">'+data[i]+'</li>';
+            }
+            $users.html(html);
+        })
+      });
+    
+    </script>
+</body>
+</html>
