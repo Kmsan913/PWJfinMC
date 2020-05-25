@@ -84,6 +84,9 @@
                 </div>
             </div>
             `);
+            $chat.animate({
+            scrollTop: $chat.get[0].scrollHeight
+            }, 500);
         })
 
         $userForm.submit(function(e){
@@ -105,9 +108,6 @@
         })
       });
     
-      $chat.animate({
-            scrollTop: $chat.get[0].scrollHeight
-            }, 500)
     </script>
 </body>
 </html>
