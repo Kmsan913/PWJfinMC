@@ -40,7 +40,7 @@
             <div class="col-sm-9 align-self-end">
                     <div class = "chat mb-3 text-right text-dark d-flex flex-column flex-end" 
                     id = "chat"
-                    style="max-height: 65vh; overflow-y: scroll;"
+                    style="max-height: 400px; overflow-y: scroll;"
                     ></div>
         
                     <form id = "messageForm">
@@ -77,8 +77,8 @@
 
         socket.on('new message', function(data){
             $chat.append(`
-            <div class="well card w-75 ml-auto mb-1 h-20" style="height: 8vh;">
-                <div class="card-body" style="height: 8vh;">
+            <div class="well card w-75 ml-auto mb-1 h-20" style="max-height: 200px;">
+                <div class="card-body">
                     <strong>${data.user}: </strong>${data.msg}
                 </div>
             </div>
